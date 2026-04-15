@@ -8,6 +8,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import java.awt.Color;
+import javax.swing.JColorChooser;
 
 import presentation.fsa.actions.UIActions;
 
@@ -49,10 +51,23 @@ public class NodePopup extends JPopupMenu {
         JMenuItem miLabelNode = new JMenuItem(new UIActions.TextAction(n));
         // miDeleteNode.addActionListener(deleteCmd);
 
+        JMenuItem miSetColor = new JMenuItem("Set state color");
+        miSetColor.addActionListener(e -> {
+            Color chosen = JColorChooser.showDialog(gdv, "Choose State Color",
+                    n.getLayout().getBackgroundColor());
+            if (chosen != null) {
+                n.getLayout().setBackgroundColor(chosen);
+                n.setNeedsRefresh(true);
+                gdv.repaint();
+            }
+        });
+
+
         add(miSetMarked);
         add(miSetInitial);
         add(new JPopupMenu.Separator());
         add(miLabelNode);
+        add(miSetColor);
         add(miSelfLoop);
         add(new JPopupMenu.Separator());
         add(deleteCmd);
