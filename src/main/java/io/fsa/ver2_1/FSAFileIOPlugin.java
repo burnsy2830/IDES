@@ -284,6 +284,12 @@ public class FSAFileIOPlugin implements FileIOPlugin {
             ps.println(indent + "</transition>");
         }
 
+
+        private static String colorToHex(java.awt.Color c) {
+            if (c == null) c = java.awt.Color.WHITE; // Default
+            return String.format("#%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
+        }
+
         /**
          * prints a state in xml
          * 
@@ -295,11 +301,12 @@ public class FSAFileIOPlugin implements FileIOPlugin {
             CircleNodeLayout c = (CircleNodeLayout) s.getAnnotation(AnnotationKeys.LAYOUT);
             if (c != null) {
                 ps.println(indent + "<state" + " id=\"" + s.getId() + "\">");
-                ps.println(indent + indent + "<circle r=\"" + String.valueOf(c.getRadius()) + "\" x=\""
-                        + String.valueOf(c.getLocation().x) + "\" y=\"" + String.valueOf(c.getLocation().y) + "\" />");
+                ps.println(indent + indent+ "<circle r=\"" + c.getRadius()+ "\" x=\"" + c.getLocation().x+ "\" y=\"" + 
+                            c.getLocation().y+ "\" bg=\"" + colorToHex(c.getBackgroundColor())+ "\" />");
                 ps.println(indent + indent + "<arrow x=\"" + String.valueOf(c.getArrow().x) + "\" y=\""
-                        + String.valueOf(c.getArrow().y) + "\" />");
+                            + String.valueOf(c.getArrow().y) + "\" />");
                 ps.println(indent + "</state>");
+                
             }
         }
 
@@ -322,6 +329,9 @@ public class FSAFileIOPlugin implements FileIOPlugin {
                         + curve.getCtrlY2() + "\" />");
                 ps.println(indent + indent + "<label x=\"" + l.getLabelOffset().x + "\" y=\"" + l.getLabelOffset().y
                         + "\" />");
+                ps.println(indent + indent + "<arrow"
+                        + (l.getArrowColor() != null ? " color=\"" + colorToHex(l.getArrowColor()) + "\"" : "")
+                        + " thickness=\"" + l.getArrowWidth() + "\" />");
                 ps.println(indent + "</transition>");
             }
         }
@@ -395,6 +405,19 @@ public class FSAFileIOPlugin implements FileIOPlugin {
                 parsingErrors += npe.getMessage() + "\n";
             }
             return model;
+        }
+
+
+        private java.awt.Color parseHexColor(String hex) {
+            if (hex == null) return null;
+            hex = hex.trim();
+            if (hex.startsWith("#")) hex = hex.substring(1);
+            if (hex.length() != 6) return null; // failed 
+
+            int r = Integer.parseInt(hex.substring(0, 2), 16);
+            int g = Integer.parseInt(hex.substring(2, 4), 16);
+            int b = Integer.parseInt(hex.substring(4, 6), 16);
+            return new java.awt.Color(r, g, b); //store this in XML file 
         }
 
         /**
@@ -656,12 +679,17 @@ public class FSAFileIOPlugin implements FileIOPlugin {
                         layout.setLocation(Float.parseFloat(atts.getValue(COORD_X)),
                                 Float.parseFloat(atts.getValue(COORD_Y)));
                         layout.setText(tmpState.getName());
+                        String bg = atts.getValue("bg"); //load the stored bg color in the xml file.
+                        if (bg != null) {
+                            layout.setBackgroundColor(parseHexColor(bg));
+                        }
                     }
 
-                    else if (qName.equals(ARROW)) {
+                     else if (qName.equals(ARROW)) {
                         CircleNodeLayout layout = (CircleNodeLayout) tmpState.getAnnotation(AnnotationKeys.LAYOUT);
-                        layout.setArrow(new Point2D.Float(Float.parseFloat(atts.getValue(COORD_X)),
-                                Float.parseFloat(atts.getValue(COORD_Y))));
+                        layout.setArrow(new Point2D.Float(
+                            Float.parseFloat(atts.getValue(COORD_X)),
+                            Float.parseFloat(atts.getValue(COORD_Y))));
                     }
 
                     else {
@@ -710,6 +738,15 @@ public class FSAFileIOPlugin implements FileIOPlugin {
                                 // System.out.println(layout.getEventNames());
                             }
                         }
+                    }
+
+
+                    else if (qName.equals(ARROW)) {
+                        BezierLayout l = (BezierLayout) tmpTransition.getAnnotation(AnnotationKeys.LAYOUT);
+                        String color = atts.getValue("color");
+                        if (color != null) l.setArrowColor(parseHexColor(color));
+                        String thickness = atts.getValue("thickness");
+                        if (thickness != null) l.setArrowWidth(Float.parseFloat(thickness));
                     }
 
                     else {

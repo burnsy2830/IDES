@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.awt.Color;
 
 import presentation.CubicParamCurve2D;
 import presentation.Geometry;
@@ -43,6 +44,11 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
 
     public static final int P2 = 3;
 
+    private Color arrowColor = null;
+
+    private float arrowWidth = 2.0f;
+
+
     protected long group = UNGROUPPED;
 
     public void setGroup(long i) {
@@ -52,6 +58,15 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
     public long getGroup() {
         return group;
     }
+
+
+    public Color getArrowColor() { return arrowColor; }
+
+    public void setArrowColor(Color c) { this.arrowColor = c; setDirty(true); }
+
+    public float getArrowWidth() { return arrowWidth; }
+
+    public void setArrowWidth(float w) { this.arrowWidth = w; setDirty(true); }
 
     /* default displacement vector for the label from the midpoint of the edge */
     public final Point2D.Float DEFAULT_LABEL_OFFSET = new Point2D.Float(5, 5);

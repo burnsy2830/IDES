@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.awt.Color;
 
 import ides.api.model.fsa.FSATransition;
 import io.fsa.ver2_1.GraphExporter;
@@ -32,6 +33,10 @@ public abstract class Edge extends GraphElement {
     // position of the curve.
 
     private GraphLabel label; // extra pointer for O(1) access to avoid
+
+    private Color arrowColor = null; 
+
+    private  java.lang.Float arrowWidth = 2.0f;
 
     // iterating over children and using instanceof
 
@@ -125,9 +130,27 @@ public abstract class Edge extends GraphElement {
         return handler;
     }
 
-    public Node getSourceNode() {
-        return source;
+
+    public  java.lang.Float getArrowWidth() {
+        return arrowWidth;
     }
+
+    public void setArrowWidth(java.lang.Float arrowWidth) {
+        this.arrowWidth = arrowWidth;
+    }
+
+
+    public Color getArrowColor() {
+        return arrowColor;
+    }
+
+    public void setArrowColor(Color arrowColor) {
+        this.arrowColor = arrowColor;
+    }
+
+    public Node getSourceNode() { return source; }
+
+
 
     public void setSourceNode(Node source) {
         this.source = source;

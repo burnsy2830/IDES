@@ -212,6 +212,12 @@ public class GraphicalLayout implements Serializable {
         return backgroundColor;
     }
 
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        dirty = true;
+
+    }
+
     /**
      * Returns the label text.
      * 

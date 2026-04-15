@@ -7,6 +7,8 @@ import java.awt.geom.Point2D.Float;
 
 import javax.swing.Action;
 import javax.swing.JMenuItem;
+import java.awt.Color;
+import javax.swing.JColorChooser;
 import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -46,6 +48,46 @@ public class EdgePopup extends JPopupMenu {
 
         miEditEvents = new JMenuItem(new UIActions.TextAction(edge));
         add(miEditEvents);
+
+
+        JMenuItem miArrowColor = new JMenuItem("Set arrow color");
+        miArrowColor.addActionListener(e -> {
+            Color chosen = JColorChooser.showDialog(
+                gdv,
+                "Choose Arrow Color",
+                ((BezierEdge) edge).getBezierLayout().getArrowColor()
+            );
+            if (chosen != null) {
+                ((BezierEdge) edge).getBezierLayout().setArrowColor(chosen);
+                edge.setNeedsRefresh(true);
+                gdv.repaint();
+            }
+        });
+        add(miArrowColor);
+
+
+        JMenuItem miArrowSize = new JMenuItem("Set arrow thickness"); //Arrow thickness selector.
+        miArrowSize.addActionListener(e -> {
+            String s = javax.swing.JOptionPane.showInputDialog(
+                gdv,
+                "Arrow thickness (e.g. 1.0 - 6.0):",
+                edge.getArrowWidth()
+            );
+
+            if (s != null) {
+                try {
+                     java.lang.Float v =  java.lang.Float.parseFloat(s);
+                    if (v > 0.1f && v <= 10.0f) {
+                        ((BezierEdge) edge).getBezierLayout().setArrowWidth(v);
+                        edge.setNeedsRefresh(true);
+                        gdv.repaint();
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+        });
+
+        add(miArrowSize);
+
 
         // if the edge can't be straightened, then we assume we cannot
         // otherwise tamper with its shape

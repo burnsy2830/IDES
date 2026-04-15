@@ -2,6 +2,7 @@ package presentation.fsa;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.awt.Color;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -25,6 +26,8 @@ public class CircleNodeLayout extends GraphicalLayout implements Serializable {
     /** the direction vector for arrow if the state is initial */
     private Point2D.Float arrow = new Point2D.Float(1, 0);
 
+    private Color arrowColor;
+
     /** the node that is laid out */
     private CircleNode node;
 
@@ -42,7 +45,7 @@ public class CircleNodeLayout extends GraphicalLayout implements Serializable {
      * Keeps track of the maximum radius over all nodes in the graph.
      */
     protected FSAGraph.UniformRadius uniformR = null;
-
+    
     public CircleNodeLayout(FSAGraph.UniformRadius u) {
         this(u, new Point2D.Float(), DEFAULT_RADIUS, "");
     }
