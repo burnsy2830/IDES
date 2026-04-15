@@ -77,7 +77,7 @@ public class EdgePopup extends JPopupMenu {
             if (s != null) {
                 try {
                      java.lang.Float v =  java.lang.Float.parseFloat(s);
-                    if (v > 0.1f && v <= 10.0f) {
+                    if (v >= 1.0f && v <= 6.0f) {
                         ((BezierEdge) edge).getBezierLayout().setArrowWidth(v);
                         edge.setNeedsRefresh(true);
                         gdv.repaint();
