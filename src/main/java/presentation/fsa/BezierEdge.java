@@ -243,7 +243,7 @@ public class BezierEdge extends Edge {
 
         // undo translation ONCE
         at.setToTranslation(-basePt.getX(), -basePt.getY());
-        g2d.transform(at);;
+        g2d.transform(at);
 
         // draw label and handler
         super.draw(g);
