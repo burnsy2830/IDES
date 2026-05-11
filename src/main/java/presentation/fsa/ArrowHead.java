@@ -12,6 +12,7 @@ import presentation.Geometry;
  * A filled polygon in the shape of an arrowhead.
  * 
  * @author Helen Bretzke
+ * @author Liam Burns - Color Extension
  */
 @SuppressWarnings("serial")
 public class ArrowHead extends Polygon {
@@ -114,9 +115,9 @@ public class ArrowHead extends Polygon {
         basePt = new Point2D.Float(0, 0);
         // compute default arrowhead pointing down
         addPoint(0, HEAD_LENGTH);
-        addPoint(-4, -3);
+        addPoint(-DEFAULT_HALF_WIDTH, DEFAULT_BACK_Y);
         addPoint((int) basePt.x, (int) basePt.y);
-        addPoint(4, -3);
+        addPoint(DEFAULT_HALF_WIDTH, DEFAULT_BACK_Y);
     }
 
     /**

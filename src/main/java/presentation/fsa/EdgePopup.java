@@ -20,6 +20,7 @@ import presentation.fsa.actions.UIActions;
  * Symmetrize command after the command has been debugged and tested.
  * 
  * @author Helen Bretzke
+ * @author Liam Burns - Color Extension
  */
 public class EdgePopup extends JPopupMenu {
 
@@ -50,15 +51,15 @@ public class EdgePopup extends JPopupMenu {
         add(miEditEvents);
 
 
-        JMenuItem miArrowColor = new JMenuItem("Set arrow color");
+        JMenuItem miArrowColor = new JMenuItem("Set edge color");
         miArrowColor.addActionListener(e -> {
             Color chosen = JColorChooser.showDialog(
                 gdv,
                 "Choose Arrow Color",
-                ((BezierEdge) edge).getBezierLayout().getArrowColor()
+                 Color.BLACK
             );
             if (chosen != null) {
-                ((BezierEdge) edge).getBezierLayout().setArrowColor(chosen);
+                ((BezierEdge) edge).getBezierLayout().setEdgeColor(chosen);
                 edge.setNeedsRefresh(true);
                 gdv.repaint();
             }
@@ -66,19 +67,19 @@ public class EdgePopup extends JPopupMenu {
         add(miArrowColor);
 
 
-        JMenuItem miArrowSize = new JMenuItem("Set arrow thickness"); //Arrow thickness selector.
+        JMenuItem miArrowSize = new JMenuItem("Set edge thickness"); //Arrow thickness selector.
         miArrowSize.addActionListener(e -> {
             String s = javax.swing.JOptionPane.showInputDialog(
                 gdv,
                 "Arrow thickness (e.g. 1.0 - 6.0):",
-                edge.getArrowWidth()
+                  ((BezierEdge) edge).getBezierLayout().getEdgeThickness()
             );
 
             if (s != null) {
                 try {
                      java.lang.Float v =  java.lang.Float.parseFloat(s);
                     if (v >= 1.0f && v <= 6.0f) {
-                        ((BezierEdge) edge).getBezierLayout().setArrowWidth(v);
+                        ((BezierEdge) edge).getBezierLayout().setEdgeThickness(v);
                         edge.setNeedsRefresh(true);
                         gdv.repaint();
                     }

@@ -22,7 +22,7 @@ import io.ParsingToolbox;
  * 
  * @author Axel Gottlieb Michelsen
  * @author Kristian Edlund
- * @author Liam Burns - Color extension 
+ * @author Liam Burns - Color Extension
  */
 public class AutomatonParser20 extends AbstractParser {
     private int state = STATE_IDLE;
@@ -59,6 +59,7 @@ public class AutomatonParser20 extends AbstractParser {
     public AutomatonParser20() {
         super();
     }
+
     /**
      * @see AbstractParser
      */
@@ -172,20 +173,21 @@ public class AutomatonParser20 extends AbstractParser {
                 state = STATE_TRANSITION;
             }
             break;
-         case STATE_STATE:
-        if (qName.equals(ELEMENT_NAME)) {
-            lastLabel = "";
-            state = STATE_STATE_NAME;
-
-        } else if (qName.equals(ELEMENT_PROPERTIES)) {
-            state = STATE_STATE_PROPERTIES;
-
-        }
-        break;
-
-
-
-
+        case (STATE_STATE):
+            if (qName.equals(ELEMENT_NAME)) {
+                lastLabel = "";
+                state = STATE_STATE_NAME;
+            } else if (qName.equals(ELEMENT_PROPERTIES)) {
+                state = STATE_STATE_PROPERTIES;
+            }
+            break;
+        case (STATE_STATE_PROPERTIES):
+            if (qName.equals(ELEMENT_INITIAL)) {
+                lastState.setInitial(true);
+            } else if (qName.equals(ELEMENT_MARKED)) {
+                lastState.setMarked(true);
+            }
+            break;
         case (STATE_TRANSITION):
             break;
         case (STATE_EVENT):
@@ -290,4 +292,4 @@ public class AutomatonParser20 extends AbstractParser {
         lastLabel += new StringBuffer().append(ch, start, length).toString();
     }
 
-}
+}   

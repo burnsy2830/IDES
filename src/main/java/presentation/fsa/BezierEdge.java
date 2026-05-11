@@ -31,7 +31,7 @@ import java.awt.Color;
  * @author Helen Bretzke
  * @author Sarah-Jane Whittaker
  * @author Lenko Grigorov
- * @author Liam Burns   
+ * @author Liam Burns  - Color Extension 
  */
 public class BezierEdge extends Edge {
 
@@ -111,7 +111,7 @@ public class BezierEdge extends Edge {
         if (!isVisible()) {
             return;
         }
-        java.lang.Float w = getBezierLayout().getArrowWidth();
+        float thickness =  getBezierLayout().getEdgeThickness();
 
         // make sure the appearance is in sync with underlying data
         if (needsRefresh() || getBezierLayout().isDirty()) {
@@ -120,10 +120,13 @@ public class BezierEdge extends Edge {
         }
 
         Graphics2D g2d = (Graphics2D) g;
-        Color baseColor = (getBezierLayout().getArrowColor() != null) ? getBezierLayout().getArrowColor() : getLayout().getColor();// if arrow doesnt allready have a color set said color to whatever the default is 
+        // if arrow doesnt allready have a color set said color to whatever the default is 
+        Color baseColor = (getBezierLayout().getEdgeColor() != null) ? getBezierLayout().getEdgeColor() : getLayout().getColor();
         // if either my source or target node is highlighted
         // then I am also hightlighted.
-        if (highlighted || getSourceNode().isHighlighted() || (getTargetNode() != null && getTargetNode().isHighlighted())) {
+        if (highlighted || getSourceNode().isHighlighted()
+                || (getTargetNode() != null && getTargetNode().isHighlighted())) {
+            
             setHighlighted(true);
             g2d.setColor(getLayout().getHighlightColor());
         } else {
@@ -138,22 +141,12 @@ public class BezierEdge extends Edge {
         }
 
         if (hasUnobservableEvent()) {
-
-            g2d.setStroke(new BasicStroke(
-                w,
-                BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND,
-                10.0f,
-                new float[] { 8.0f, 8.0f },
-                0.0f
-            ));
+            g2d.setStroke(GraphicalLayout.getDashedStroke(thickness));
         } else {
-            g2d.setStroke(new BasicStroke(
-                w,
-                BasicStroke.CAP_ROUND,
-                BasicStroke.JOIN_ROUND
-            ));
+            g2d.setStroke(GraphicalLayout.getWideStroke(thickness));
         }
+
+        
 
         // TODO should stop drawing at base of arrowhead and at outside of node
         // boundaries.
@@ -167,7 +160,7 @@ public class BezierEdge extends Edge {
         if (!hasUncontrollableEvent() && getBezierLayout().getControllableMarker() != null) {
             Line2D originalMarker = getBezierLayout().getControllableMarker();
         
-            float lengthScale = Math.max(1.0f, w * 0.5f); // Adjust multiplier as needed
+            float lengthScale = Math.max(1.0f, thickness * 0.5f); // Adjust multiplier as needed
           
             double x1 = originalMarker.getX1();
             double y1 = originalMarker.getY1();
@@ -185,7 +178,7 @@ public class BezierEdge extends Edge {
             Line2D scaledMarker = new Line2D.Double(newX1, newY1, newX2, newY2);
           
             g2d.setStroke(new BasicStroke(
-                Math.max(1.0f, w), 
+                Math.max(1.0f, thickness), 
                 BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER
             ));
@@ -204,8 +197,8 @@ public class BezierEdge extends Edge {
         float headScale;
         double backoff;
 
-        if (w != 2) {
-            headScale = 1.0f + (w - 2.0f) * 0.35f;
+        if (thickness != BezierLayout.DEFAULT_EDGE_THICKNESS) {
+            headScale = 1.0f + (thickness - BezierLayout.DEFAULT_EDGE_THICKNESS) * 0.35f;
             headScale = Math.max(1.0f, Math.min(2.5f, headScale));
             arrowHead.rebuildScaled(headScale);
             backoff = (ArrowHead.SHORT_HEAD_LENGTH * headScale) +2.0;
@@ -229,7 +222,7 @@ public class BezierEdge extends Edge {
         at.setToTranslation(basePt.getX(), basePt.getY());
         g2d.transform(at);
 
-      
+        // rotate to align with end of curve
         double rho = Geometry.angleFrom(ArrowHead.axis, unitArrowDir);
         if (!Double.isNaN(rho)) {
             at.setToRotation(rho);

@@ -624,7 +624,7 @@ public class InitialArrow extends Edge {
 
             Graphics2D g2d = (Graphics2D) g;
 
-            g2d.setColor(Color.RED);
+            g2d.setColor(Color.BLUE);
             g2d.setStroke(GraphicalLayout.FINE_STROKE);
             g2d.draw(anchor);
         }

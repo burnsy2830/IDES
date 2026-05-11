@@ -128,6 +128,7 @@ public class CircleNode extends Node {
             refresh();
             getLayout().setDirty(false);
         }
+        // only calls draw on all of the outgoing edges
         Iterator<GraphElement> c = children();
         while (c.hasNext()) {
             try {
@@ -135,6 +136,9 @@ public class CircleNode extends Node {
                 if (child.getSourceNode().equals(this)) {
                     child.draw(g);
                 }
+            // skip the label and keep going
+            // HB says to self: Why am I skipping the label?
+            // Why did I decide to do it at the end?
             } catch (ClassCastException ignore) {
                 
             }
@@ -154,11 +158,11 @@ public class CircleNode extends Node {
 
 
         if (isSelected()) {
-            g2d.setColor(getLayout().getSelectionColor());
+            g.setColor(getLayout().getSelectionColor());
         } else if (isHighlighted()) {
-            g2d.setColor(getLayout().getHighlightColor());
+            g.setColor(getLayout().getHighlightColor());
         } else {
-            g2d.setColor(getLayout().getColor());
+            g.setColor(getLayout().getColor());
         }
 
         g2d.setStroke(GraphicalLayout.WIDE_STROKE);

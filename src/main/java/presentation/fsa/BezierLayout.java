@@ -22,6 +22,7 @@ import presentation.GraphicalLayout;
  * Graphical data and operations for visual display of a BezierEdge.
  * 
  * @author Helen Bretzke
+ * @author Liam Burns - Color Extension
  */
 public class BezierLayout extends GraphicalLayout implements Serializable {
 
@@ -44,9 +45,14 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
 
     public static final int P2 = 3;
 
-    private Color arrowColor = null;
+    private Color edgeColor = null;
 
-    private float arrowWidth = 2.0f;
+    
+
+    public static final float DEFAULT_EDGE_THICKNESS = 2.0f;
+
+
+    private float EdgeThickness = DEFAULT_EDGE_THICKNESS;
 
 
     protected long group = UNGROUPPED;
@@ -60,13 +66,23 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
     }
 
 
-    public Color getArrowColor() { return arrowColor; }
+    public Color getEdgeColor() {
+        return edgeColor;
+    }
 
-    public void setArrowColor(Color c) { this.arrowColor = c; setDirty(true); }
+    public void setEdgeColor(Color c) {
+        this.edgeColor = c;
+        setDirty(true);
+    }
 
-    public float getArrowWidth() { return arrowWidth; }
+    public float getEdgeThickness() {
+        return EdgeThickness;
+    }
 
-    public void setArrowWidth(float w) { this.arrowWidth = w; setDirty(true); }
+    public void setEdgeThickness(float thickness) {
+        this.EdgeThickness = thickness;
+        setDirty(true);
+    }
 
     /* default displacement vector for the label from the midpoint of the edge */
     public final Point2D.Float DEFAULT_LABEL_OFFSET = new Point2D.Float(5, 5);
@@ -854,6 +870,8 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
         out.writeDouble(angle2);
         out.writeDouble(s1);
         out.writeDouble(s2);
+        out.writeObject(edgeColor);
+        out.writeFloat(EdgeThickness);
         out.writeInt(eventNames.size());
         for (int i = 0; i < eventNames.size(); ++i) {
             out.writeObject(eventNames.get(i));
@@ -876,6 +894,8 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
         angle2 = in.readDouble();
         s1 = in.readDouble();
         s2 = in.readDouble();
+        edgeColor = (Color) in.readObject();
+        EdgeThickness = in.readFloat();
         int eventCount = in.readInt();
         eventNames = new ArrayList<String>(eventCount);
         for (int i = 0; i < eventCount; ++i) {

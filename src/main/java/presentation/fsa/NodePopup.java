@@ -13,6 +13,12 @@ import javax.swing.JColorChooser;
 
 import presentation.fsa.actions.UIActions;
 
+
+
+/**
+ * @author Liam Burns - Color Extension
+ */
+
 public class NodePopup extends JPopupMenu {
     private static GraphDrawingView view;
 
