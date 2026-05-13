@@ -132,7 +132,6 @@ You can reposition nodes by dragging them with the mouse cursor.
 
 ![](guide_html_4984efb.png)
 
-### Customizing colors and edge thickness
 
 Node background colors can be customized by right-clicking on a node
 and selecting "_Set state color_".
