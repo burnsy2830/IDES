@@ -718,6 +718,11 @@ public class FSAFileIOPlugin implements FileIOPlugin {
                             layout.setBackgroundColor(parseHexColor(bg));
                         }
                     }
+                    else if (qName.equals(ARROW)) {
+                        CircleNodeLayout layout = (CircleNodeLayout) tmpState.getAnnotation(AnnotationKeys.LAYOUT);
+                        layout.setArrow(new Point2D.Float(Float.parseFloat(atts.getValue(COORD_X)),
+                                Float.parseFloat(atts.getValue(COORD_Y))));
+                    }
                 }
 
                 else if (CURRENT_PARSING_ELEMENT == TRANSITION) {
@@ -770,15 +775,6 @@ public class FSAFileIOPlugin implements FileIOPlugin {
                                 // System.out.println(layout.getEventNames());
                             }
                         }
-                    }
-
-
-                    else if (qName.equals(ARROW)) {
-                        BezierLayout l = (BezierLayout) tmpTransition.getAnnotation(AnnotationKeys.LAYOUT);
-                        String color = atts.getValue("color");
-                        if (color != null) l.setEdgeColor(parseHexColor(color));
-                        String thickness = atts.getValue("thickness");
-                        if (thickness != null) l.setEdgeThickness(Float.parseFloat(thickness));
                     }
 
                     else {

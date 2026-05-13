@@ -13,6 +13,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import ides.api.core.Hub;
+import presentation.fsa.actions.EdgeActions;
 import presentation.fsa.actions.UIActions;
 
 /**
@@ -51,27 +53,26 @@ public class EdgePopup extends JPopupMenu {
         add(miEditEvents);
 
 
-        JMenuItem miArrowColor = new JMenuItem("Set edge color");
+        JMenuItem miArrowColor = new JMenuItem(Hub.string("comSetEdgeColor"));
         miArrowColor.addActionListener(e -> {
             Color chosen = JColorChooser.showDialog(
                 gdv,
-                "Choose Arrow Color",
+                "Choose Edge Color",
                  Color.BLACK
             );
             if (chosen != null) {
-                ((BezierEdge) edge).getBezierLayout().setEdgeColor(chosen);
-                edge.setNeedsRefresh(true);
+                new EdgeActions.SetEdgeColorAction(gdv.graphModel, edge, chosen).execute();
                 gdv.repaint();
             }
         });
         add(miArrowColor);
 
 
-        JMenuItem miArrowSize = new JMenuItem("Set edge thickness"); //Arrow thickness selector.
+        JMenuItem miArrowSize = new JMenuItem(Hub.string("comSetEdgeThickness")); //Arrow thickness selector.
         miArrowSize.addActionListener(e -> {
             String s = javax.swing.JOptionPane.showInputDialog(
                 gdv,
-                "Arrow thickness (e.g. 1.0 - 6.0):",
+                "Edge thickness (e.g. 1.0 - 6.0):",
                   ((BezierEdge) edge).getBezierLayout().getEdgeThickness()
             );
 
@@ -79,8 +80,7 @@ public class EdgePopup extends JPopupMenu {
                 try {
                      java.lang.Float v =  java.lang.Float.parseFloat(s);
                     if (v >= 1.0f && v <= 6.0f) {
-                        ((BezierEdge) edge).getBezierLayout().setEdgeThickness(v);
-                        edge.setNeedsRefresh(true);
+                        new EdgeActions.SetEdgeThicknessAction(gdv.graphModel, edge, v).execute();
                         gdv.repaint();
                     }
                 } catch (NumberFormatException ignored) {}

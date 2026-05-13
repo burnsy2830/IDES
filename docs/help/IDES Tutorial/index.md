@@ -126,6 +126,20 @@ You can change the shape of an edge manually by clicking on the edge
 and then dragging the two small handles (circles) until the curve forms
 the desired shape. Undesired modifications can be undone by selecting "_Undo_".
 
+### Customizing colors and edge thickness
+
+Node background colors can be customized by right-clicking on a node
+and selecting "_Set state color_".
+![](guide_html_color2.png)
+
+Edge colors and edge thicknesses can be customized by right-clicking
+on an edge and selecting "_Set edge color_" or
+"_Set edge thickness_".
+![](guide_html_color1.png)
+
+Note that LaTeX/EPS export does not currently support custom model colors
+or edge thicknesses.
+
 ![](guide_html_7a2ff655.png)
 
 You can reposition nodes by dragging them with the mouse cursor.

@@ -52,7 +52,7 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
     public static final float DEFAULT_EDGE_THICKNESS = 2.0f;
 
 
-    private float EdgeThickness = DEFAULT_EDGE_THICKNESS;
+    private float edgeThickness = DEFAULT_EDGE_THICKNESS;
 
 
     protected long group = UNGROUPPED;
@@ -76,11 +76,11 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
     }
 
     public float getEdgeThickness() {
-        return EdgeThickness;
+        return edgeThickness;
     }
 
     public void setEdgeThickness(float thickness) {
-        this.EdgeThickness = thickness;
+        this.edgeThickness = thickness;
         setDirty(true);
     }
 
@@ -871,7 +871,7 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
         out.writeDouble(s1);
         out.writeDouble(s2);
         out.writeObject(edgeColor);
-        out.writeFloat(EdgeThickness);
+        out.writeFloat(edgeThickness);
         out.writeInt(eventNames.size());
         for (int i = 0; i < eventNames.size(); ++i) {
             out.writeObject(eventNames.get(i));
@@ -895,7 +895,7 @@ public class BezierLayout extends GraphicalLayout implements Serializable {
         s1 = in.readDouble();
         s2 = in.readDouble();
         edgeColor = (Color) in.readObject();
-        EdgeThickness = in.readFloat();
+        edgeThickness = in.readFloat();
         int eventCount = in.readInt();
         eventNames = new ArrayList<String>(eventCount);
         for (int i = 0; i < eventCount; ++i) {
